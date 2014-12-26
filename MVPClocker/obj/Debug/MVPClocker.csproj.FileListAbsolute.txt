@@ -30,3 +30,16 @@ C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.Properties.
 C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
 C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.NotifierDlg.resources
 C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\bin\Debug\alarm.wav
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.exe.config
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.exe
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.pdb
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\alarm.wav
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.exe
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.pdb
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\ResolveAssemblyReference.cache
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.MobParamsDlg.resources
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.MainDlg.resources
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.NotifierDlg.resources
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.Properties.Resources.resources
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
+D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.KilledAtDlg.resources

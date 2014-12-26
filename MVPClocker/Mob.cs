@@ -62,6 +62,8 @@ namespace MVPClocker
             ID = mob.ID;
             Name = mob.Name;
             RespCD = mob.RespCD;
+            Status = mob.Status;
+            LastCheck = mob.LastCheck;
         }
 
         public void SetToElement(ref XmlElement eMob, XmlDocument xd)

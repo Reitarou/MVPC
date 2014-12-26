@@ -13,6 +13,7 @@ namespace MVPClocker
         private string m_IniPath = "mvpc.ini";
         private string m_DBPath = string.Empty;
         private List<Mob> m_Mobs = new List<Mob>();
+        private Dictionary<string, bool> m_Notifiers;
 
         private class MobComparer : IComparer<Mob>
         {
@@ -20,17 +21,52 @@ namespace MVPClocker
 
             public int Compare(Mob x, Mob y)
             {
-                if ((x.Status == Resources.sKilled) && (y.Status == Resources.sKilled))
+                if (x.Status == Resources.sAlive)
                 {
-                    return x.RespIn.CompareTo(y.RespIn);
-                }
-                else
-                {
-                    if (x.Status == Resources.sKilled)
+                    if (y.Status == Resources.sAlive)
+                    {
+                        return x.Name.CompareTo(y.Name);
+                    }
+                    else if (y.Status == Resources.sKilled)
+                    {
                         return -1;
-                    else
-                        return 1;
+                    }
+                    else //if (y.Status == Resources.sUnknown)
+                    {
+                        return -1;
+                    }
                 }
+                else if (x.Status == Resources.sKilled)
+                {
+                    if (y.Status == Resources.sAlive)
+                    {
+                        return 1;
+                    }
+                    else if (y.Status == Resources.sKilled)
+                    {
+                        return x.RespIn.CompareTo(y.RespIn);
+                    }
+                    else //if (y.Status == Resources.sUnknown)
+                    {
+                        return -1;
+                    }
+                }
+                else //if (x.Status == Resources.sUnknown)
+                {
+                    if (y.Status == Resources.sAlive)
+                    {
+                        return 1;
+                    }
+                    else if (y.Status == Resources.sKilled)
+                    {
+                        return 1;
+                    }
+                    else //if (y.Status == Resources.sUnknown)
+                    {
+                        return x.Name.CompareTo(y.Name);
+                    }
+                }
+                    
             }
 
             #endregion
@@ -69,6 +105,14 @@ namespace MVPClocker
             }
 
             RefreshDB();
+
+            m_Notifiers = new Dictionary<string,bool>();
+            foreach (var mob in m_Mobs)
+            {
+                m_Notifiers.Add(mob.Name, false);
+            }
+
+            RefreshNextMVPLabel();
         }
 
         private void RefreshDB()
@@ -100,18 +144,64 @@ namespace MVPClocker
 
             m_Mobs.Sort(new MobComparer());
 
+            RefreshTable();
+        }
+
+        private void RefreshNextMVPLabel()
+        {
+            var name = string.Empty;
+            var dt = TimeSpan.MaxValue;
+
+            foreach (var mob in m_Mobs)
+            {
+                if (mob.Status == Resources.sKilled)
+                {
+                    var t = mob.RespIn.Subtract(DateTime.Now);
+                    if (t < dt)
+                    {
+                        name = mob.Name;
+                        dt = t;
+                    }
+                }
+            }
+
+            if (name == string.Empty)
+            {
+                lbNextMVP.Text = Resources.sUnknownResp;
+            }
+            else
+            {
+                lbNextMVP.Text = string.Format(Resources.sKnownResp, name, dt.TotalMinutes.ToString("F0"));
+            }
+        }
+
+        private void RefreshTable()
+        {
             dgvMobs.Rows.Clear();
             foreach (var mob in m_Mobs)
             {
+                if (cbUseNameFilter.Checked)
+                {
+                    var filter = tbFilter.Text.ToLower();
+                    if (filter.Length > 0)
+                    {
+                        var name = mob.Name.ToLower();
+                        if (!name.Contains(filter))
+                        {
+                            continue;
+                        }
+                    }
+                }
+
                 var index = dgvMobs.Rows.Add();
-                if(dgvMobs.Columns[dgvcID.Name].Visible)
+                if (dgvMobs.Columns[dgvcID.Name].Visible)
                     dgvMobs.Rows[index].Cells[dgvcID.Name].Value = mob.ID;
                 if (dgvMobs.Columns[dgvcName.Name].Visible)
-                dgvMobs.Rows[index].Cells[dgvcName.Name].Value = mob.Name;
+                    dgvMobs.Rows[index].Cells[dgvcName.Name].Value = mob.Name;
                 if (dgvMobs.Columns[dgvcRespCD.Name].Visible)
-                dgvMobs.Rows[index].Cells[dgvcRespCD.Name].Value = mob.RespCD;
+                    dgvMobs.Rows[index].Cells[dgvcRespCD.Name].Value = mob.RespCD;
                 if (dgvMobs.Columns[dgvcStatus.Name].Visible)
-                dgvMobs.Rows[index].Cells[dgvcStatus.Name].Value = mob.Status;
+                    dgvMobs.Rows[index].Cells[dgvcStatus.Name].Value = mob.Status;
 
                 var respIn = "--:--:--";
                 if (mob.Status == Resources.sKilled)
@@ -191,6 +281,17 @@ namespace MVPClocker
                     RefreshDB();
                     break;
                 }
+            }
+        }
+
+        private void btnKilledAt_Click(object sender, EventArgs e)
+        {
+            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
+            var mob = GetMobFromDB(name);
+            if (KilledAtDlg.Execute(ref mob))
+            {
+                SetMobToDB(mob);
+                RefreshDB();
             }
         }
 
@@ -282,17 +383,38 @@ namespace MVPClocker
 
             foreach (var mob in m_Mobs)
             {
+                if ((mob.Status == Resources.sKilled) && (mob.RespIn.Subtract(DateTime.Now).TotalMinutes < (double)numericUpDown1.Value))
+                {
+                    if ((m_Notifiers.ContainsKey(mob.Name) && (m_Notifiers[mob.Name] == false)))
+                    {
+                        m_Notifiers[mob.Name] = true;
+                        var dlg = new NotifierDlg();
+                    dlg.lbMessage.Text = string.Format(Resources.sKnownResp, mob.Name, mob.RespIn.Subtract(DateTime.Now).TotalMinutes.ToString("F0"));
+                    dlg.Show();
+                    dlg.Left = SystemInformation.PrimaryMonitorSize.Width - dlg.Width;
+                    dlg.Top = SystemInformation.PrimaryMonitorSize.Height - dlg.Height - 80;
+                    //dlg.player.Play();
+                    changed = true;
+                    }
+                    
+                }
+
                 if ((mob.Status == Resources.sKilled) && (DateTime.Now > mob.RespIn))
                 {
                     mob.LastCheck = DateTime.Now;
                     mob.Status = Resources.sAlive;
+                    if (m_Notifiers.ContainsKey(mob.Name))
+                    {
+                        m_Notifiers[mob.Name] = false;
+                    }
+
                     SetMobToDB(mob);
                     var dlg = new NotifierDlg();
-                    dlg.Left = SystemInformation.PrimaryMonitorSize.Width - dlg.Width;
-                    dlg.Top = SystemInformation.PrimaryMonitorSize.Height - dlg.Height;
                     dlg.lbMessage.Text = string.Format(Resources.sMobResped, mob.Name);
                     dlg.Show();
-                    dlg.player.Play();
+                    dlg.Left = SystemInformation.PrimaryMonitorSize.Width - dlg.Width;
+                    dlg.Top = SystemInformation.PrimaryMonitorSize.Height - dlg.Height-80;
+                    //dlg.player.Play();
                     changed = true;
                 }
 
@@ -310,7 +432,16 @@ namespace MVPClocker
                 RefreshDB();
             }
 
+            RefreshNextMVPLabel();
+
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            RefreshTable();
+        }
+
+        
 
         
     }

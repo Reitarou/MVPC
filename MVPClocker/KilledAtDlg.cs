@@ -7,35 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using MVPClocker.Properties;
 
 namespace MVPClocker
 {
-    public partial class MobParamsDlg : Form
+    public partial class KilledAtDlg : Form
     {
         private static Mob m_Mob;
-        
-        public MobParamsDlg()
+
+        public KilledAtDlg()
         {
             InitializeComponent();
         }
 
         private void DoInit()
         {
-            tbID.Text = m_Mob.ID.ToString();
-            tbName.Text = m_Mob.Name;
-            tbRespCD.Text = m_Mob.RespCD;
+            dtPicker.Value = DateTime.Now;
         }
 
         private void DoCommit()
         {
-            m_Mob.ID = tbID.Text;
-            m_Mob.Name = tbName.Text;
-            m_Mob.RespCD = tbRespCD.Text;
+            m_Mob.LastCheck = dtPicker.Value;
+            m_Mob.Status = Resources.sKilled;
         }
 
         public static bool Execute(ref Mob mob)
         {
-            using (var dlg = new MobParamsDlg())
+            using (var dlg = new KilledAtDlg())
             {
                 m_Mob = new Mob();
                 m_Mob.Assign(mob);
@@ -63,9 +61,15 @@ namespace MVPClocker
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnOk_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
     }

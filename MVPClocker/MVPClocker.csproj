@@ -63,6 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KilledAtDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KilledAtDlg.Designer.cs">
+      <DependentUpon>KilledAtDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="MobParamsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +90,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="KilledAtDlg.resx">
+      <DependentUpon>KilledAtDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MobParamsDlg.resx">
       <DependentUpon>MobParamsDlg.cs</DependentUpon>
       <SubType>Designer</SubType>

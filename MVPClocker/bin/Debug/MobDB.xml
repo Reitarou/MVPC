@@ -1,10 +1,185 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <mob_db>
   <mob>
-    <ID>60</ID>
-    <Name>test2</Name>
+    <ID>1623</ID>
+    <Name>RSX-0806 Печка</Name>
+    <RespCD>125</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1087</ID>
+    <Name>Герой Орков Хиро</Name>
     <RespCD>60</RespCD>
     <Status>Н/Д</Status>
-    <LastCheck>2014;12;26;5;8;8</LastCheck>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1389</ID>
+    <Name>Дракула</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1112</ID>
+    <Name>Дрейк</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1492</ID>
+    <Name>Зачарованный Самурай</Name>
+    <RespCD>91</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1086</ID>
+    <Name>Золотой Жук ГТБ</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1190</ID>
+    <Name>Лорд Орков</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1150</ID>
+    <Name>Лунный Свет Мунлайт</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1147</ID>
+    <Name>Майя</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1418</ID>
+    <Name>Повелитель Змей</Name>
+    <RespCD>94</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1059</ID>
+    <Name>Повелительница Мистресс</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1251</ID>
+    <Name>Рыцарь Бури Лось</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1583</ID>
+    <Name>Тао Гунка</Name>
+    <RespCD>123</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1511</ID>
+    <Name>Амон-Ра</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1157</ID>
+    <Name>Фараон</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1159</ID>
+    <Name>Фриони</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1115</ID>
+    <Name>Эддга</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1272</ID>
+    <Name>Повелитель Тьмы Дарк Лорд</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1038</ID>
+    <Name>Осирис</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1312</ID>
+    <Name>Генерал Черепах</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1039</ID>
+    <Name>Бафомет</Name>
+    <RespCD>120</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1630</ID>
+    <Name>Белая Леди</Name>
+    <RespCD>117</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>1;1;1;0;0;0</LastCheck>
+  </mob>
+  <mob>
+    <ID>1511</ID>
+    <Name>Амон-Ра Фараон</Name>
+    <RespCD>60</RespCD>
+    <Status>Убит</Status>
+    <LastCheck>2014;12;26;18;56;5</LastCheck>
+  </mob>
+  <mob>
+    <ID>1046</ID>
+    <Name>Допельгангер</Name>
+    <RespCD>120</RespCD>
+    <Status>Убит</Status>
+    <LastCheck>2014;12;26;18;56;9</LastCheck>
+  </mob>
+  <mob>
+    <ID>1252</ID>
+    <Name>Гарм</Name>
+    <RespCD>120</RespCD>
+    <Status>Убит</Status>
+    <LastCheck>2014;12;26;18;56;14</LastCheck>
+  </mob>
+  <mob>
+    <ID>1685</ID>
+    <Name>Веспер</Name>
+    <RespCD>120</RespCD>
+    <Status>Убит</Status>
+    <LastCheck>2014;12;26;18;56;20</LastCheck>
   </mob>
 </mob_db>
