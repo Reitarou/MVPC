@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mob_db>
+  <mob>
+    <ID>60</ID>
+    <Name>test2</Name>
+    <RespCD>60</RespCD>
+    <Status>Н/Д</Status>
+    <LastCheck>2014;12;26;5;8;8</LastCheck>
+  </mob>
+</mob_db>
