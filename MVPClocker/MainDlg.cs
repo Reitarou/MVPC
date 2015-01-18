@@ -12,6 +12,7 @@ namespace MVPClocker
     {
         private string m_IniPath = "mvpc.ini";
         private string m_DBPath = string.Empty;
+        private int m_TimeZone = 0;
         private List<Mob> m_Mobs = new List<Mob>();
         private Dictionary<string, bool> m_Notifiers;
 
@@ -90,18 +91,31 @@ namespace MVPClocker
             xd.Load(fs);
 
             XmlNodeList list = xd.GetElementsByTagName("dbPath");
-            XmlElement dbPath = (XmlElement)xd.GetElementsByTagName("dbPath")[0];
-            m_DBPath = dbPath.InnerText;
+            XmlElement xe = (XmlElement)xd.GetElementsByTagName("dbPath")[0];
+            m_DBPath = xe.InnerText;
+
+            list = xd.GetElementsByTagName("TimeZone");
+            xe = (XmlElement)xd.GetElementsByTagName("TimeZone")[0];
+            m_TimeZone = int.Parse(xe.InnerText);
+
             fs.Close();
 
             fp = m_DBPath;
             if (!File.Exists(fp))
             {
-                XmlTextWriter xtw = new XmlTextWriter(fp, Encoding.UTF8);
-                xtw.WriteStartDocument();
-                xtw.WriteStartElement("mob_db");
-                xtw.WriteEndDocument();
-                xtw.Close();
+                var result = MessageBox.Show("База данных не найдена. Создать новую?", "Ошибка", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    XmlTextWriter xtw = new XmlTextWriter(fp, Encoding.UTF8);
+                    xtw.WriteStartDocument();
+                    xtw.WriteStartElement("mob_db");
+                    xtw.WriteEndDocument();
+                    xtw.Close();
+                }
+                else
+                {
+                    Close();
+                }
             }
 
             RefreshDB();
@@ -138,6 +152,7 @@ namespace MVPClocker
                 if (int.TryParse(mob.RespCD, out respCD))
                 {
                     var date = mob.LastCheck.AddMinutes(respCD);
+                    date.AddHours(m_TimeZone);
                     mob.RespIn = date;
                 }
             }
@@ -225,10 +240,17 @@ namespace MVPClocker
             XmlDocument xd = new XmlDocument();
             FileStream fs = new FileStream(fp, FileMode.Open, FileAccess.ReadWrite);
             xd.Load(fs);
+            
             XmlElement eDBPath = xd.CreateElement("dbPath");
             XmlText tDBPath = xd.CreateTextNode("MobDB.xml");
             eDBPath.AppendChild(tDBPath);
             xd.DocumentElement.AppendChild(eDBPath);
+
+            XmlElement eTimeZone = xd.CreateElement("TimeZone");
+            XmlText tTimeZone = xd.CreateTextNode("0");
+            eTimeZone.AppendChild(tTimeZone);
+            xd.DocumentElement.AppendChild(eTimeZone);
+
             fs.Close();
             xd.Save(fp);
         }
