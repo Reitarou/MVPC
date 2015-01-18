@@ -21,16 +21,16 @@ namespace MVPClocker
 
         private void DoInit()
         {
-            tbID.Text = m_Mob.ID.ToString();
+            //tbID.Text = m_Mob.ID.ToString();
             tbName.Text = m_Mob.Name;
-            tbRespCD.Text = m_Mob.RespCD;
+            tbRespCD.Text = m_Mob.RespCD.ToString();
         }
 
         private void DoCommit()
         {
-            m_Mob.ID = tbID.Text;
+            //m_Mob.ID = tbID.Text;
             m_Mob.Name = tbName.Text;
-            m_Mob.RespCD = tbRespCD.Text;
+            m_Mob.RespCD = int.Parse(tbRespCD.Text);
         }
 
         public static bool Execute(ref Mob mob)

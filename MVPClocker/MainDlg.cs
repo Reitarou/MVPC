@@ -148,13 +148,8 @@ namespace MVPClocker
 
             foreach (var mob in m_Mobs)
             {
-                int respCD;
-                if (int.TryParse(mob.RespCD, out respCD))
-                {
-                    var date = mob.LastCheck.AddMinutes(respCD);
-                    date.AddHours(m_TimeZone);
-                    mob.RespIn = date;
-                }
+                var date = mob.LastCheck.AddMinutes(mob.RespCD);
+                mob.RespIn = date;
             }
 
             m_Mobs.Sort(new MobComparer());
@@ -209,22 +204,30 @@ namespace MVPClocker
                 }
 
                 var index = dgvMobs.Rows.Add();
-                if (dgvMobs.Columns[dgvcID.Name].Visible)
-                    dgvMobs.Rows[index].Cells[dgvcID.Name].Value = mob.ID;
+                if (dgvMobs.Columns[dgvcTrack.Name].Visible)
+                    dgvMobs.Rows[index].Cells[dgvcTrack.Name].Value = mob.Track;
                 if (dgvMobs.Columns[dgvcName.Name].Visible)
                     dgvMobs.Rows[index].Cells[dgvcName.Name].Value = mob.Name;
-                if (dgvMobs.Columns[dgvcRespCD.Name].Visible)
-                    dgvMobs.Rows[index].Cells[dgvcRespCD.Name].Value = mob.RespCD;
                 if (dgvMobs.Columns[dgvcStatus.Name].Visible)
                     dgvMobs.Rows[index].Cells[dgvcStatus.Name].Value = mob.Status;
-
                 var respIn = "--:--:--";
+                var killedAt = "--:--:--";
                 if (mob.Status == Resources.sKilled)
                 {
-                    respIn = Tools.DateTimeToShortString(mob.RespIn);
+                    var curTime = mob.RespIn.AddHours(m_TimeZone);
+                    respIn = Tools.DateTimeToShortString(curTime);
                 }
+                if (mob.Status != Resources.sUnknown)
+                {
+                    var curTime = mob.LastCheck.AddHours(m_TimeZone);
+                    killedAt = Tools.DateTimeToShortString(curTime);
+                }
+
                 if (dgvMobs.Columns[dgvcRespIn.Name].Visible)
                     dgvMobs.Rows[index].Cells[dgvcRespIn.Name].Value = respIn;
+                if (dgvMobs.Columns[dgvcName.Name].Visible)
+                    dgvMobs.Rows[index].Cells[dgvcKilledAt.Name].Value = killedAt;
+                
             }
         }
 
@@ -297,7 +300,8 @@ namespace MVPClocker
             {
                 if (mob.Name == name)
                 {
-                    mob.LastCheck = DateTime.Now;
+                    var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
+                    mob.LastCheck = mskTime;
                     mob.Status = Resources.sKilled;
                     SetMobToDB(mob);
                     RefreshDB();
@@ -420,27 +424,29 @@ namespace MVPClocker
                     
                 }
 
+                var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
+
                 if ((mob.Status == Resources.sKilled) && (DateTime.Now > mob.RespIn))
                 {
-                    mob.LastCheck = DateTime.Now;
+                    mob.LastCheck = mskTime;
                     mob.Status = Resources.sAlive;
+                    SetMobToDB(mob);
+
                     if (m_Notifiers.ContainsKey(mob.Name))
                     {
                         m_Notifiers[mob.Name] = false;
                     }
-
-                    SetMobToDB(mob);
                     var dlg = new NotifierDlg();
                     dlg.lbMessage.Text = string.Format(Resources.sMobResped, mob.Name);
                     dlg.Show();
                     dlg.Left = SystemInformation.PrimaryMonitorSize.Width - dlg.Width;
                     dlg.Top = SystemInformation.PrimaryMonitorSize.Height - dlg.Height-80;
-                    //dlg.player.Play();
+                    
                     changed = true;
                 }
 
-                var tooLate = mob.LastCheck.AddHours(3);
-                if ((mob.Status == Resources.sAlive) && (DateTime.Now > tooLate))
+                var tooLate = mob.LastCheck.AddMinutes(mob.RespCD);
+                if ((mob.Status == Resources.sAlive) && (mskTime > tooLate))
                 {
                     mob.Status = Resources.sUnknown;
                     SetMobToDB(mob);

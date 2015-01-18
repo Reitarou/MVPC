@@ -9,9 +9,9 @@ namespace MVPClocker
 {
     public class Mob
     {
-        public string ID = string.Empty;
+        public bool Track = true;
         public string Name = string.Empty;
-        public string RespCD = "0";
+        public int RespCD = 0;
         public string Status = Resources.sUnknown;
         public DateTime LastCheck = DateTime.MinValue;
         public DateTime RespIn = DateTime.MaxValue;
@@ -22,10 +22,13 @@ namespace MVPClocker
 
         public Mob(XmlNode eMob)
         {
-            var nID = eMob.SelectSingleNode("ID");
-            if (nID != null)
+            var nTrack = eMob.SelectSingleNode("Track");
+            if (nTrack != null)
             {
-                ID = nID.InnerText;
+                if (nTrack.InnerText == "False")
+                {
+                    Track = false;
+                }
             }
 
             var nName = eMob.SelectSingleNode("Name");
@@ -37,7 +40,11 @@ namespace MVPClocker
             var nRespCD = eMob.SelectSingleNode("RespCD");
             if (nRespCD != null)
             {
-                RespCD = nRespCD.InnerText;
+                int iRespCD;
+                if (int.TryParse(nRespCD.InnerText, out iRespCD))
+                {
+                    RespCD = iRespCD;
+                }
             }
 
             var nStatus = eMob.SelectSingleNode("Status");
@@ -59,7 +66,7 @@ namespace MVPClocker
 
         public void Assign(Mob mob)
         {
-            ID = mob.ID;
+            Track = mob.Track;
             Name = mob.Name;
             RespCD = mob.RespCD;
             Status = mob.Status;
@@ -69,7 +76,7 @@ namespace MVPClocker
         public void SetToElement(ref XmlElement eMob, XmlDocument xd)
         {
             eMob.RemoveAll();
-            eMob.AppendChild(AddNode(xd, "ID", ID));
+            eMob.AppendChild(AddNode(xd, "Track", Track));
             eMob.AppendChild(AddNode(xd, "Name", Name));
             eMob.AppendChild(AddNode(xd, "RespCD", RespCD));
             eMob.AppendChild(AddNode(xd, "Status", Status));
@@ -82,7 +89,24 @@ namespace MVPClocker
             var xet = xd.CreateTextNode(value);
             xe.AppendChild(xet);
             return xe;
-            
+        }
+
+        public XmlElement AddNode(XmlDocument xd, string key, bool value)
+        {
+            var xe = xd.CreateElement(key);
+            var sValue = value.ToString();
+            var xet = xd.CreateTextNode(sValue);
+            xe.AppendChild(xet);
+            return xe;
+        }
+
+        public XmlElement AddNode(XmlDocument xd, string key, int value)
+        {
+            var xe = xd.CreateElement(key);
+            var sValue = value.ToString();
+            var xet = xd.CreateTextNode(sValue);
+            xe.AppendChild(xet);
+            return xe;
         }
     }
 }
