@@ -120,6 +120,9 @@
   <data name="sAlive" xml:space="preserve">
     <value>Жив</value>
   </data>
+  <data name="sDBver" xml:space="preserve">
+    <value>DBver</value>
+  </data>
   <data name="sKilled" xml:space="preserve">
     <value>Убит</value>
   </data>

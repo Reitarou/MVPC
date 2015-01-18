@@ -21,10 +21,13 @@ namespace MVPClocker
 
         public static string DateTimeToShortString(DateTime time)
         {
-            var s = string.Empty;
-            s += time.Hour + ":";
-            s += time.Minute + ":";
-            s += time.Second;
+            var s = string.Format("{0}:{1}:{2}", time.Hour.ToString("00"), time.Minute.ToString("00"), time.Second.ToString("00")); 
+            return s;
+        }
+
+        public static string DateTimeToLongString(DateTime time)
+        {
+            var s = string.Format("{0}:{1}:{2} [{3}/{4} {5}]", time.Hour.ToString("00"), time.Minute.ToString("00"), time.Second.ToString("00"), time.Day, time.Month, time.Year);
             return s;
         }
 

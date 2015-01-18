@@ -10,9 +10,12 @@ namespace MVPClocker
 {
     public partial class MainDlg : Form
     {
+        private const string c_Ver = "1.5";
+
         private string m_IniPath = "mvpc.ini";
         private string m_DBPath = string.Empty;
         private int m_TimeZone = 0;
+        private DateTime m_DBver;
         private List<Mob> m_Mobs = new List<Mob>();
         private Dictionary<string, bool> m_Notifiers;
 
@@ -80,6 +83,8 @@ namespace MVPClocker
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.Text = string.Format("MVP Resp Calc v.{0} by Rei", c_Ver);
+
             var fp = m_IniPath;
             if (!File.Exists(fp))
             {
@@ -138,6 +143,26 @@ namespace MVPClocker
             FileStream fs = new FileStream(fp, FileMode.Open, FileAccess.Read);
             xd.Load(fs);
 
+            var nVers = xd.GetElementsByTagName(Resources.sDBver);
+            if (nVers.Count > 0)
+            {
+                var eVer = (XmlElement)nVers[0];
+                var sVer = eVer.InnerText;
+                var DBver = Tools.StringToDateTime(sVer);
+                if (DBver != null)
+                {
+                    m_DBver = DBver.Value;
+                }
+                else
+                {
+                    m_DBver = DateTime.MinValue;
+                }
+            }
+            else
+            {
+                m_DBver = DateTime.MinValue;
+            }
+
             var nMobs = xd.GetElementsByTagName("mob");
             for (int i = 0; i < nMobs.Count; i++)
             {
@@ -155,33 +180,48 @@ namespace MVPClocker
             m_Mobs.Sort(new MobComparer());
 
             RefreshTable();
+            RefreshNextMVPLabel();
         }
 
         private void RefreshNextMVPLabel()
         {
-            var name = string.Empty;
-            var dt = TimeSpan.MaxValue;
+            var list = new List<Mob>();
 
             foreach (var mob in m_Mobs)
             {
                 if (mob.Status == Resources.sKilled)
                 {
-                    var t = mob.RespIn.Subtract(DateTime.Now);
-                    if (t < dt)
-                    {
-                        name = mob.Name;
-                        dt = t;
-                    }
+                    list.Add(mob);
                 }
             }
 
-            if (name == string.Empty)
+            list.Sort(new MobComparer());
+
+            if (list.Count > 0)
             {
-                lbNextMVP.Text = Resources.sUnknownResp;
+                lbNextMVP1.Text = string.Format(Resources.sKnownResp, list[0].Name, (list[0].RespIn - DateTime.Now).TotalMinutes.ToString("F0"));
             }
             else
             {
-                lbNextMVP.Text = string.Format(Resources.sKnownResp, name, dt.TotalMinutes.ToString("F0"));
+                lbNextMVP1.Text = Resources.sUnknownResp;
+            }
+
+            if (list.Count > 1)
+            {
+                lbNextMVP2.Text = string.Format(Resources.sKnownResp, list[1].Name, (list[1].RespIn - DateTime.Now).TotalMinutes.ToString("F0"));
+            }
+            else
+            {
+                lbNextMVP2.Text = Resources.sUnknownResp;
+            }
+
+            if (list.Count > 2)
+            {
+                lbNextMVP3.Text = string.Format(Resources.sKnownResp, list[2].Name, (list[2].RespIn - DateTime.Now).TotalMinutes.ToString("F0"));
+            }
+            else
+            {
+                lbNextMVP3.Text = Resources.sUnknownResp;
             }
         }
 
@@ -214,20 +254,16 @@ namespace MVPClocker
                 var killedAt = "--:--:--";
                 if (mob.Status == Resources.sKilled)
                 {
-                    var curTime = mob.RespIn.AddHours(m_TimeZone);
-                    respIn = Tools.DateTimeToShortString(curTime);
+                    var riTime = mob.RespIn.AddHours(m_TimeZone);
+                    respIn = Tools.DateTimeToShortString(riTime);
                 }
-                if (mob.Status != Resources.sUnknown)
-                {
-                    var curTime = mob.LastCheck.AddHours(m_TimeZone);
-                    killedAt = Tools.DateTimeToShortString(curTime);
-                }
+                var lcTime = mob.LastCheck.AddHours(m_TimeZone);
+                killedAt = Tools.DateTimeToLongString(lcTime);
 
                 if (dgvMobs.Columns[dgvcRespIn.Name].Visible)
                     dgvMobs.Rows[index].Cells[dgvcRespIn.Name].Value = respIn;
                 if (dgvMobs.Columns[dgvcName.Name].Visible)
                     dgvMobs.Rows[index].Cells[dgvcKilledAt.Name].Value = killedAt;
-                
             }
         }
 
@@ -258,70 +294,7 @@ namespace MVPClocker
             xd.Save(fp);
         }
 
-        #region Buttons
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            var newMob = new Mob();
-            if (MobParamsDlg.Execute(ref newMob))
-            {
-                SetMobToDB(newMob);
-                RefreshDB();
-            }
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
-            var mob = GetMobFromDB(name);
-            if (MobParamsDlg.Execute(ref mob))
-            {
-                if (mob.Name == name)
-                {
-                    RemoveMobFromDB(name);
-                }
-                SetMobToDB(mob);
-                RefreshDB();
-            }
-        }
-
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
-            RemoveMobFromDB(name);
-            RefreshDB();
-        }
-
-        private void btnKilled_Click(object sender, EventArgs e)
-        {
-            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
-
-            foreach (var mob in m_Mobs)
-            {
-                if (mob.Name == name)
-                {
-                    var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
-                    mob.LastCheck = mskTime;
-                    mob.Status = Resources.sKilled;
-                    SetMobToDB(mob);
-                    RefreshDB();
-                    break;
-                }
-            }
-        }
-
-        private void btnKilledAt_Click(object sender, EventArgs e)
-        {
-            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
-            var mob = GetMobFromDB(name);
-            if (KilledAtDlg.Execute(ref mob))
-            {
-                SetMobToDB(mob);
-                RefreshDB();
-            }
-        }
-
-        #endregion
+        
 
         #region DB
 
@@ -351,10 +324,34 @@ namespace MVPClocker
 
         private void SetMobToDB(Mob mob)
         {
+            var dbVer = GetDBfileVer();
+            var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
+            var minTime = 5;
+            if ((mskTime - dbVer).TotalSeconds < minTime)
+            {
+                MessageBox.Show("База только что изменена. Подождите {0} сек.", minTime.ToString());
+                return;
+            }
+
             var fp = m_DBPath;
             XmlDocument xd = new XmlDocument();
             FileStream fs = new FileStream(fp, FileMode.Open, FileAccess.ReadWrite);
             xd.Load(fs);
+
+            var vers = xd.GetElementsByTagName(Resources.sDBver);
+            XmlElement eVer;
+            if (vers.Count > 0)
+            {
+                eVer = (XmlElement)vers[0];
+            }
+            else
+            {
+                eVer = xd.CreateElement(Resources.sDBver);
+            }
+            eVer.RemoveAll();
+            XmlText tDBPath = xd.CreateTextNode(Tools.DateTimeToString(mskTime));
+            eVer.AppendChild(tDBPath);
+            xd.DocumentElement.AppendChild(eVer);
 
             XmlElement eMob = xd.CreateElement("mob");
             var nMobs = xd.GetElementsByTagName("mob");
@@ -405,17 +402,27 @@ namespace MVPClocker
 
         private void checkTimer_Tick(object sender, EventArgs e)
         {
+            var ver = DateTime.MinValue;
+            ver = GetDBfileVer();
+
+            if (ver > m_DBver)
+            {
+                RefreshDB();
+                return;
+            }
+
             var changed = false;
 
             foreach (var mob in m_Mobs)
             {
-                if ((mob.Status == Resources.sKilled) && (mob.RespIn.Subtract(DateTime.Now).TotalMinutes < (double)numericUpDown1.Value))
+                var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
+                if ((mob.Status == Resources.sKilled) && (mob.RespIn.Subtract(mskTime).TotalMinutes < (double)numericUpDown1.Value))
                 {
                     if ((m_Notifiers.ContainsKey(mob.Name) && (m_Notifiers[mob.Name] == false)))
                     {
                         m_Notifiers[mob.Name] = true;
                         var dlg = new NotifierDlg();
-                    dlg.lbMessage.Text = string.Format(Resources.sKnownResp, mob.Name, mob.RespIn.Subtract(DateTime.Now).TotalMinutes.ToString("F0"));
+                        dlg.lbMessage.Text = string.Format(Resources.sKnownResp, mob.Name, mob.RespIn.Subtract(mskTime).TotalMinutes.ToString("F0"));
                     dlg.Show();
                     dlg.Left = SystemInformation.PrimaryMonitorSize.Width - dlg.Width;
                     dlg.Top = SystemInformation.PrimaryMonitorSize.Height - dlg.Height - 80;
@@ -424,11 +431,9 @@ namespace MVPClocker
                     
                 }
 
-                var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
 
-                if ((mob.Status == Resources.sKilled) && (DateTime.Now > mob.RespIn))
+                if ((mob.Status == Resources.sKilled) && (mskTime > mob.RespIn))
                 {
-                    mob.LastCheck = mskTime;
                     mob.Status = Resources.sAlive;
                     SetMobToDB(mob);
 
@@ -445,7 +450,7 @@ namespace MVPClocker
                     changed = true;
                 }
 
-                var tooLate = mob.LastCheck.AddMinutes(mob.RespCD);
+                var tooLate = mob.LastCheck.AddMinutes(mob.RespCD+30);
                 if ((mob.Status == Resources.sAlive) && (mskTime > tooLate))
                 {
                     mob.Status = Resources.sUnknown;
@@ -458,9 +463,33 @@ namespace MVPClocker
             {
                 RefreshDB();
             }
+        }
 
-            RefreshNextMVPLabel();
+        private DateTime GetDBfileVer()
+        {
+            var result = DateTime.MinValue;
+            var fp = m_DBPath;
+            if (!File.Exists(fp))
+            {
+                CreateDefaultIni();
+            }
 
+            XmlDocument xd = new XmlDocument();
+            FileStream fs = new FileStream(fp, FileMode.Open, FileAccess.Read);
+            xd.Load(fs);
+
+            XmlNodeList list = xd.GetElementsByTagName(Resources.sDBver);
+            if (list.Count > 0)
+            {
+                XmlElement xe = (XmlElement)xd.GetElementsByTagName(Resources.sDBver)[0];
+                var ver = Tools.StringToDateTime(xe.InnerText);
+                if (ver.HasValue)
+                {
+                    result = ver.Value;
+                }
+            }
+            fs.Close();
+            return result;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -468,7 +497,89 @@ namespace MVPClocker
             RefreshTable();
         }
 
-        
+        #region Buttons
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            var newMob = new Mob();
+            if (MobParamsDlg.Execute(ref newMob))
+            {
+                SetMobToDB(newMob);
+                RefreshDB();
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
+            var mob = GetMobFromDB(name);
+            if (MobParamsDlg.Execute(ref mob))
+            {
+                if (mob.Name == name)
+                {
+                    RemoveMobFromDB(name);
+                }
+                SetMobToDB(mob);
+                RefreshDB();
+            }
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
+            RemoveMobFromDB(name);
+            RefreshDB();
+        }
+
+
+
+        private void btnKilledAt_Click(object sender, EventArgs e)
+        {
+            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
+            var mob = GetMobFromDB(name);
+            if (KilledAtDlg.Execute(ref mob))
+            {
+                SetMobToDB(mob);
+                RefreshDB();
+            }
+        }
+
+        private void btnKilled_Click(object sender, EventArgs e)
+        {
+            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
+
+            foreach (var mob in m_Mobs)
+            {
+                if (mob.Name == name)
+                {
+                    var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
+                    mob.LastCheck = mskTime;
+                    mob.Status = Resources.sKilled;
+                    SetMobToDB(mob);
+                    RefreshDB();
+                    break;
+                }
+            }
+        }
+
+        private void btnNA_Click(object sender, EventArgs e)
+        {
+            var name = dgvMobs.SelectedRows[0].Cells[dgvcName.Name].Value.ToString();
+            foreach (var mob in m_Mobs)
+            {
+                if (mob.Name == name)
+                {
+                    var mskTime = DateTime.Now.AddHours(-1 * m_TimeZone);
+                    mob.LastCheck = mskTime;
+                    mob.Status = Resources.sUnknown;
+                    SetMobToDB(mob);
+                    RefreshDB();
+                    break;
+                }
+            }
+        }
+
+        #endregion
 
         
     }
