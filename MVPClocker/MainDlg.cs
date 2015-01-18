@@ -393,7 +393,6 @@ namespace MVPClocker
                     dlg.Show();
                     dlg.Left = SystemInformation.PrimaryMonitorSize.Width - dlg.Width;
                     dlg.Top = SystemInformation.PrimaryMonitorSize.Height - dlg.Height - 80;
-                    //dlg.player.Play();
                     changed = true;
                     }
                     

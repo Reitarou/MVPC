@@ -12,7 +12,6 @@ namespace MVPClocker
 {
     public partial class NotifierDlg : Form
     {
-        public System.Media.SoundPlayer player = new System.Media.SoundPlayer("alarm.wav");
         public NotifierDlg()
         {
             InitializeComponent();
@@ -25,7 +24,6 @@ namespace MVPClocker
 
         private void NotifierDlg_FormClosed(object sender, FormClosedEventArgs e)
         {
-            player.Stop();
         }
     }
 }

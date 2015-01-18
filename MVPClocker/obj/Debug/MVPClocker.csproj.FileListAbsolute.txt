@@ -1,45 +1,12 @@
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\ResolveAssemblyReference.cache
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\MVPClocker.Properties.Resources.resources
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
-D:\Rei\Personal projects\MVPClocker\MVPClocker\bin\Debug\MVPClocker.exe.config
-D:\Rei\Personal projects\MVPClocker\MVPClocker\bin\Debug\MVPClocker.exe
-D:\Rei\Personal projects\MVPClocker\MVPClocker\bin\Debug\MVPClocker.pdb
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\MVPClocker.exe
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\MVPClocker.pdb
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\MVPClocker.MobParamsDlg.resources
-D:\Rei\Personal projects\MVPClocker\MVPClocker\obj\Debug\MVPClocker.MainDlg.resources
-D:\Dropbox\MVPClocker\MVPClocker\bin\Debug\MVPClocker.exe.config
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\MVPClocker.exe
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\MVPClocker.pdb
-D:\Dropbox\MVPClocker\MVPClocker\bin\Debug\MVPClocker.exe
-D:\Dropbox\MVPClocker\MVPClocker\bin\Debug\MVPClocker.pdb
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\ResolveAssemblyReference.cache
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\MVPClocker.MobParamsDlg.resources
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\MVPClocker.MainDlg.resources
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\MVPClocker.Properties.Resources.resources
-D:\Dropbox\MVPClocker\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\bin\Debug\MVPClocker.exe.config
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.exe
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.pdb
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\bin\Debug\MVPClocker.exe
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\bin\Debug\MVPClocker.pdb
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.MobParamsDlg.resources
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.MainDlg.resources
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.Properties.Resources.resources
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\obj\Debug\MVPClocker.NotifierDlg.resources
-C:\Users\Reitarou\Desktop\MVPClocker\MVPClocker\bin\Debug\alarm.wav
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.exe.config
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.exe
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.pdb
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\alarm.wav
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.exe
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.pdb
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\ResolveAssemblyReference.cache
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.MobParamsDlg.resources
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.MainDlg.resources
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.NotifierDlg.resources
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.Properties.Resources.resources
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
-D:\Rei\Personal projects\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.KilledAtDlg.resources
+D:\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.exe.config
+D:\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.exe
+D:\GitHub\MVPC\MVPClocker\bin\Debug\MVPClocker.pdb
+D:\GitHub\MVPC\MVPClocker\obj\Debug\ResolveAssemblyReference.cache
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.KilledAtDlg.resources
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.MobParamsDlg.resources
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.MainDlg.resources
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.NotifierDlg.resources
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.Properties.Resources.resources
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.csproj.GenerateResource.Cache
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.exe
+D:\GitHub\MVPC\MVPClocker\obj\Debug\MVPClocker.pdb
